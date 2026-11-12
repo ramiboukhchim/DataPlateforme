@@ -1,0 +1,27 @@
+# Secrets : ne JAMAIS commiter
+.env
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# Données et bases locales (volumineuses, reproductibles)
+data/*
+!data/.gitkeep
+*.duckdb
+*.duckdb.wal
+*.parquet
+
+# Outils
+.pytest_cache/
+.ruff_cache/
+.DS_Store

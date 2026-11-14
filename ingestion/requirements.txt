@@ -1,0 +1,4 @@
+# Versions testées (voir ADR : reproductibilité)
+dlt[duckdb]==1.32.0
+requests
+pytest

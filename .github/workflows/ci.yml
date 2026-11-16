@@ -34,8 +34,26 @@ jobs:
       - name: Lancer ruff
         run: ruff check .
 
+  contrats:
+    name: Contrats de données (datacontract-cli)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Installer datacontract-cli
+        run: pip install "datacontract-cli[csv]==1.2.10"
+      - name: Vérifier les contrats
+        run: |
+          for contrat in contracts/*.yaml; do
+            echo "=== $contrat"
+            datacontract lint "$contrat"
+            datacontract test "$contrat"
+          done
+
 # À ajouter plus tard, quand les fichiers existeront :
 #   - SQLFluff (après la création du projet dbt)
 #   - pytest
-#   - vérification des contrats (datacontract-cli)
+
 #   - dbt build sur un échantillon

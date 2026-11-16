@@ -1,0 +1,91 @@
+apiVersion: v3.2.0
+kind: DataContract
+id: eco2mix-national-cons-def
+name: eCO2mix national — données définitives et consolidées (RTE / ODRE)
+version: 1.0.0
+status: draft
+
+team:
+  name: Rami Boukhchim (Ingestion)
+
+description:
+  purpose: Production et consommation d'électricité en France, au quart d'heure (Q1, Q2, Q3).
+  limitations: Historique de 2012 à fin août 2026. Environ 50 % des lignes n'ont que des prévisions (mesures vides).
+
+schema:
+  - name: eco2mix_national_cons_def
+    description: Une ligne par quart d'heure.
+    properties:
+      - name: date_heure
+        logicalType: string
+        description: Horodatage avec décalage horaire (+01:00 ou +02:00), converti en UTC au staging.
+        required: true
+        unique: true
+      - name: date
+        logicalType: string
+        description: Date locale (AAAA-MM-JJ).
+        required: true
+      - name: heure
+        logicalType: string
+        description: Heure locale (HH:MM).
+        required: true
+      - name: perimetre
+        logicalType: string
+        description: Périmètre géographique.
+        required: true
+        quality:
+          - metric: invalidValues
+            arguments:
+              validValues: ["France"]
+            mustBe: 0
+      - name: nature
+        logicalType: string
+        description: Niveau de consolidation de la donnée.
+        required: true
+        quality:
+          - metric: invalidValues
+            arguments:
+              validValues: ["Données définitives", "Données consolidées"]
+            mustBe: 0
+      - name: consommation
+        logicalType: number
+        description: Consommation réalisée, en MW (vide si pas encore mesurée).
+        logicalTypeOptions:
+          minimum: 20000
+          maximum: 110000
+      - name: nucleaire
+        logicalType: number
+        description: Production nucléaire, en MW.
+        logicalTypeOptions:
+          minimum: 0
+      - name: eolien
+        logicalType: number
+        description: Production éolienne, en MW.
+        logicalTypeOptions:
+          minimum: 0
+      - name: solaire
+        logicalType: number
+        description: Production solaire, en MW.
+        logicalTypeOptions:
+          minimum: 0
+      - name: hydraulique
+        logicalType: number
+        description: Production hydraulique, en MW.
+        logicalTypeOptions:
+          minimum: 0
+      - name: bioenergies
+        logicalType: number
+        description: Production bioénergies, en MW.
+        logicalTypeOptions:
+          minimum: 0
+
+servers:
+  - server: echantillon
+    type: local
+    path: ./tests/fixtures/eco2mix_cons_def_sample.csv
+    format: csv
+
+slaProperties:
+  - property: retention
+    value: 5
+    unit: y

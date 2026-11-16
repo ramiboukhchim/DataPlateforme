@@ -30,7 +30,8 @@ jobs:
         with:
           python-version: "3.11"
       - name: Installer ruff
-        run: pip install ruff==0.17.5      - name: Lancer ruff
+        run: pip install ruff==0.17.5
+      - name: Lancer ruff
         run: ruff check .
 
 # À ajouter plus tard, quand les fichiers existeront :

@@ -1,0 +1,48 @@
+apiVersion: v3.2.0
+kind: DataContract
+id: meteo-horaire
+name: Météo horaire (Open-Meteo)
+version: 1.0.0
+status: draft
+
+team:
+  name: Rami Boukhchim (Ingestion)
+
+description:
+  purpose: Température et ensoleillement horaires, utilisés pour Q2 et Q3.
+  limitations: Une seule ville de référence. Horodatage sans fuseau (converti en UTC au staging).
+
+schema:
+  - name: meteo_horaire
+    description: Une ligne par heure.
+    properties:
+      - name: time
+        logicalType: string
+        description: Heure de la mesure, format AAAA-MM-JJTHH:MM, sans fuseau.
+        required: true
+        unique: true
+      - name: temperature_2m
+        logicalType: number
+        description: Température à 2 m, en °C.
+        required: true
+        logicalTypeOptions:
+          minimum: -30
+          maximum: 50
+      - name: shortwave_radiation
+        logicalType: number
+        description: Rayonnement solaire, en W/m².
+        required: true
+        logicalTypeOptions:
+          minimum: 0
+          maximum: 1400
+
+servers:
+  - server: echantillon
+    type: local
+    path: ./tests/fixtures/meteo_sample.csv
+    format: csv
+
+slaProperties:
+  - property: retention
+    value: 5
+    unit: y

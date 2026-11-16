@@ -62,7 +62,7 @@ def fetch_export(dataset_id: str, win_start: date, win_end: date) -> list[dict]:
     r.raise_for_status()
     data = r.json()
     if not isinstance(data, list):
-        raise ValueError(f"Réponse inattendue de l'export {dataset_id}: {type(data)}")
+        raise TypeError(f"Réponse inattendue de l'export {dataset_id}: {type(data)}")
     return data
 
 

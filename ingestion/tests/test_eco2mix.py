@@ -51,7 +51,7 @@ def distinct_keys(db, table):
 @pytest.fixture
 def env(tmp_path, monkeypatch):
     db = tmp_path / "wh.duckdb"
-    kw = dict(db_path=str(db), pipelines_dir=str(tmp_path / "dlt"))
+    kw = {"db_path": str(db), "pipelines_dir": str(tmp_path / "dlt")}
     return db, kw, monkeypatch
 
 

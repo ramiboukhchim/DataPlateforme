@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Données brutes chargées par l'ingestion"
+
+    schema: raw
+
+    tables:
+      - name: eco2mix_national_cons_def
+        description: "Données historiques eCO2mix"
+
+      - name: eco2mix_national_tr
+        description: "Données temps réel eCO2mix"
+
+      - name: meteo_horaire
+        description: "Données météorologiques horaires"

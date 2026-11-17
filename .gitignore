@@ -25,3 +25,19 @@ data/*
 .pytest_cache/
 .ruff_cache/
 .DS_Store
+# Environnement Python
+.venv/
+__pycache__/
+
+# Bases DuckDB locales
+*.duckdb
+*.duckdb.wal
+
+# Fichiers generes par dbt
+**/target/
+**/logs/
+**/dbt_packages/
+**/.user.yml
+
+# Secrets locaux
+.env

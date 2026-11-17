@@ -1,0 +1,92 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: "Calendrier horaire UTC pour les analyses temporelles."
+    columns:
+      - name: date_heure_id
+        description: "Cle unique representant une heure UTC."
+        data_tests: [unique, not_null]
+      - name: date_jour
+        description: "Date civile en UTC."
+      - name: annee
+        description: "Annee de la mesure."
+      - name: mois
+        description: "Mois de 1 a 12."
+      - name: jour
+        description: "Jour du mois."
+      - name: heure
+        description: "Heure UTC de 0 a 23."
+      - name: jour_semaine
+        description: "Jour de semaine, dimanche = 0."
+      - name: trimestre
+        description: "Trimestre de 1 a 4."
+
+  - name: dim_filiere
+    description: "Referentiel des filieres de production electrique."
+    columns:
+      - name: filiere_id
+        description: "Identifiant unique de la filiere."
+        data_tests: [unique, not_null]
+      - name: nom_filiere
+        description: "Nom lisible de la filiere."
+      - name: est_renouvelable
+        description: "Indique si la filiere est renouvelable."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [true, false]
+                quote: false
+
+  - name: fct_production_horaire
+    description: "Puissance moyenne horaire par filiere et perimetre, en MW. Modele incremental."
+    columns:
+      - name: date_heure_id
+        description: "Heure UTC de production."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_heure_id
+      - name: perimetre
+        description: "Zone geographique de production."
+        data_tests: [not_null]
+      - name: filiere_id
+        description: "Filiere de production associee."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_filiere')
+                field: filiere_id
+      - name: production_mw
+        description: "Puissance moyenne sur l'heure en MW, nullable si mesure absente."
+
+  - name: fct_consommation_meteo_horaire
+    description: "Consommation horaire et meteo pour analyser temperature et solaire."
+    columns:
+      - name: date_heure_id
+        description: "Heure UTC de la mesure."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_heure_id
+      - name: perimetre
+        description: "Perimetre geographique."
+        data_tests: [not_null]
+      - name: consommation_mw
+        description: "Puissance moyenne consommee durant l'heure, en MW."
+      - name: temperature_c
+        description: "Temperature de l'air en degres Celsius, nullable."
+      - name: rayonnement_w_m2
+        description: "Rayonnement solaire en watts par metre carre, nullable."
+      - name: solaire_mw
+        description: "Puissance solaire moyenne horaire, en MW."
+      - name: nb_observations
+        description: "Nombre d'enregistrements electriques dans l'heure."
+      - name: nb_mesures
+        description: "Nombre de valeurs de consommation non nulles dans l'heure."

@@ -1,0 +1,9 @@
+filiere_id,nom_filiere,est_renouvelable
+eolien,Eolien,true
+solaire,Solaire,true
+hydraulique,Hydraulique,true
+bioenergies,Bioenergies,true
+nucleaire,Nucleaire,false
+gaz,Gaz,false
+charbon,Charbon,false
+fioul,Fioul,false
